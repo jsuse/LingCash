@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import SwiftUICharts
 
 struct ContentView: View {
     var body: some View {
@@ -32,23 +33,63 @@ struct ContentView: View {
 }
 
 struct HomeView: View {
+    @State private var isVoiceRecording = false
+    @State private var totalValue: Double = 72
+    @State private var categoryData: [Double] = [25, 30, 17]
+
     var body: some View {
         VStack {
-            Button(action: startVoiceRecognition) {
-                Label("Voice Record", systemImage: "mic")
+            // Circular Chart
+            PieChartView(data: categoryData, title: "Total Value", legend: "Categories", valueSpecifier: "%.0f")
+                .frame(height: 200)
+                .padding()
+
+            // Category Sections
+            HStack {
+                VStack {
+                    Circle().fill(Color.pink).frame(width: 20, height: 20)
+                    Text("情感往来")
+                }
+                VStack {
+                    Circle().fill(Color.blue).frame(width: 20, height: 20)
+                    Text("三餐")
+                }
+                VStack {
+                    Circle().fill(Color.yellow).frame(width: 20, height: 20)
+                    Text("零食")
+                }
             }
-            Button(action: startOCR) {
-                Label("Import Screenshot", systemImage: "photo")
+            .padding()
+
+            // Start Recording Button
+            Button(action: startRecording) {
+                Text("立即记账")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(10)
             }
+            .padding()
+
+            // Voice Recording Toggle
+            Toggle(isOn: $isVoiceRecording) {
+                Text("切换到语音记账")
+            }
+            .padding()
+        }
+        .onAppear {
+            fetchData()
         }
     }
-    
-    func startVoiceRecognition() {
-        // Start voice recognition
+
+    func startRecording() {
+        // Logic to start recording
     }
-    
-    func startOCR() {
-        // Start OCR process
+
+    func fetchData() {
+        // Fetch data from backend and update totalValue and categoryData
+        // Example: Use URLSession to call the API and update state variables
     }
 }
 
